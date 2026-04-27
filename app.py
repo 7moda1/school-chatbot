@@ -151,7 +151,10 @@ def chatbot():
     if request.method == "OPTIONS":
         return jsonify({}), 200
 
-    user_id = request.args.get("user_id") or request.json.get("user_id") if request.is_json else None
+    user_id = request.args.get("user_id")
+    if not user_id:
+        body = request.get_json(silent=True) or {}
+        user_id = body.get("user_id")
     action  = request.args.get("action")
 
     # ── get_history ──
